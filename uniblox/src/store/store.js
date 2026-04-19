@@ -8,6 +8,7 @@ export const store = {
   stats: {
     totalRevenue: 0,
     totalItems: 0,
-    totalDiscount: 0
-  }
+    totalDiscount: 0,
+    totalOrders: 0
+  },
 };
