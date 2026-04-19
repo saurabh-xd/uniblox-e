@@ -1,0 +1,107 @@
+{
+  "info": {
+    "name": "Ecommerce Backend API",
+    "_postman_id": "b1f3a1b2-1234-5678-9abc-def123456789",
+    "description": "Postman collection for testing Ecommerce Backend APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Add to Cart",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"1\",\n  \"name\": \"Shirt\",\n  \"price\": 100,\n  \"quantity\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/cart/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "cart", "add"]
+        }
+      }
+    },
+    {
+      "name": "Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/cart",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "cart"]
+        }
+      }
+    },
+    {
+      "name": "Checkout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"discountCode\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/checkout",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "checkout"]
+        }
+      }
+    },
+    {
+      "name": "Generate Discount",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"percentage\": 20\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/admin/generate-discount",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "admin", "generate-discount"]
+        }
+      }
+    },
+    {
+      "name": "Get Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/admin/stats",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "admin", "stats"]
+        }
+      }
+    }
+  ]
+}
