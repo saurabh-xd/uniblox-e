@@ -22,6 +22,15 @@ export const checkoutService = (discountCode) => {
   //  apply discount
   const { valid, discount } = validateDiscount(discountCode);
 
+
+  if(!valid){
+
+    return {
+      message: "discount is not aplied",
+      code: 400
+    }
+  }
+
   if (valid) {
     discountAmount = (total * discount) / 100;
     markDiscountUsed(discountCode);

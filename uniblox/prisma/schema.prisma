@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model User {
+  id        String   @id @default(uuid())
+  username  String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+
+  cartItems CartItem[]
+  orders    Order[]
+  discount Discount[]
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  productId String
+  name      String
+  price     Float
+  quantity  Int
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+
+  total           Float
+  discountAmount  Float
+  finalAmount     Float
+
+  items           OrderItem[]
+
+  createdAt       DateTime @default(now())
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+
+  productId String
+  name      String
+  price     Float
+  quantity  Int
+}
+
+model Discount {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  percentage Float
+  isUsed     Boolean  @default(false)
+
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+
+  createdAt  DateTime @default(now())
+}
+
+model Stats {
+  id             String  @id @default("global")
+  totalRevenue   Float   @default(0)
+  totalItems     Int     @default(0)
+  totalDiscount  Float   @default(0)
+  totalOrders    Int     @default(0)
+}
+

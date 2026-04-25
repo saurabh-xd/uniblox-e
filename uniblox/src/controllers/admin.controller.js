@@ -15,7 +15,7 @@ export const generateDiscount = (req, res) => {
       discount,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error generating discount" });
+  return  res.status(500).json({ message: "Error generating discount" });
   }
 };
 
@@ -25,6 +25,6 @@ export const stats = (req, res) => {
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching stats" });
+   return res.status(500).json({ message: "Error fetching stats" });
   }
 };

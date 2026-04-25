@@ -1,4 +1,5 @@
 import { addToCartService, getCartService } from "../services/cart.service.js";
+import { store } from "../store/store.js";
 
 export const addToCart = (req, res) => {
   try {
@@ -11,6 +12,10 @@ export const addToCart = (req, res) => {
     const cart = addToCartService({ id, name, price, quantity });
 
     res.json({ message: "Item added", cart });
+    console.log(store);
+    
+
+
   } catch (error) {
     res.status(500).json({ message: "Error adding item" });
   }
