@@ -22,9 +22,7 @@ export const checkoutService = (discountCode) => {
   //  apply discount
   const { valid, discount } = validateDiscount(discountCode);
 
-
-  if(!valid){
-
+  if (discountCode && !valid) {
     return {
       message: "discount is not aplied",
       code: 400
