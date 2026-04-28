@@ -13,15 +13,17 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  username  String
-  email     String     @unique
-  password  String
-  role      Role       @default(USER)
-  cartItems CartItem[]
-  orders    Order[]
-  discount  Discount[]
-  createdAt DateTime   @default(now())
+  id       String @id @default(uuid())
+  username String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+
+  cart         Cart?
+  orders       Order[]
+  couponUsages CouponUsage[]
+  addresses    Address[]
+  createdAt    DateTime      @default(now())
 }
 
 enum Role {
@@ -29,52 +31,125 @@ enum Role {
   ADMIN
 }
 
+enum Status {
+  pending
+  completed
+  cancelled
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userid    String     @unique
+  user      User       @relation(fields: [userid], references: [id])
+  cartItem  CartItem[]
+  createdAt DateTime   @default(now())
+}
+
 model CartItem {
   id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
   productId String
-  name      String
-  price     Float
+  product   Product?
   quantity  Int
-  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  stock       Int
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  createdAt  DateTime    @default(now())
+  cartItemId String      @unique
+  cartItem   CartItem    @relation(fields: [cartItemId], references: [id])
+  orderId    String      @unique
+  order      Order       @relation(fields: [orderId], references: [id])
+  orderItems OrderItem[]
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  products Product[]
 }
 
 model Order {
-  id             String      @id @default(uuid())
-  userId         String
-  user           User        @relation(fields: [userId], references: [id])
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   total          Float
   discountAmount Float
   finalAmount    Float
-  items          OrderItem[]
-  createdAt      DateTime    @default(now())
+
+  status Status      @default(pending)
+  items  OrderItem[]
+
+  couponUsage CouponUsage?
+  payment     Payment?
+
+  createdAt DateTime @default(now())
+  product   Product?
 }
 
 model OrderItem {
-  id        String @id @default(uuid())
-  orderId   String
-  order     Order  @relation(fields: [orderId], references: [id])
+  id      String @id @default(uuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
   productId String
-  name      String
-  price     Float
-  quantity  Int
+  product   Product? @relation(fields: [productId], references: [id])
+
+  quantity Int
+  price    Float
 }
 
-model Discount {
-  id         String   @id @default(uuid())
-  code       String   @unique
-  percentage Float
-  isUsed     Boolean  @default(false)
-  userId     String?
-  user       User?    @relation(fields: [userId], references: [id])
-  createdAt  DateTime @default(now())
+model Coupon {
+  id              String   @id @default(uuid())
+  code            String   @unique
+  discountPercent Int
+  maxUsage        Int
+  usedCount       Int      @default(0)
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+
+  usages CouponUsage[]
 }
 
-model Stats {
-  id            String @id @default("global")
-  totalRevenue  Float  @default(0)
-  totalItems    Int    @default(0)
-  totalDiscount Float  @default(0)
-  totalOrders   Int    @default(0)
+model CouponUsage {
+  id       String @id @default(uuid())
+  couponId String
+  coupon   Coupon @relation(fields: [couponId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+}
+
+model Payment {
+  id      String @id @default(uuid())
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  amount        Float
+  status        Status
+  paymentMethod String
+}
+
+model Address {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  city    String
+  state   String
+  country String
+  pincode Int
 }
