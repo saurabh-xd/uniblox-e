@@ -46,11 +46,12 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(uuid())
-  cartId    String
-  cart      Cart     @relation(fields: [cartId], references: [id])
+  id     String @id @default(uuid())
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id])
+
   productId String
-  product   Product?
+  product   Product @relation(fields: [productId], references: [id])
   quantity  Int
 }
 
@@ -64,12 +65,13 @@ model Product {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
-  createdAt  DateTime    @default(now())
-  cartItemId String      @unique
-  cartItem   CartItem    @relation(fields: [cartItemId], references: [id])
-  orderId    String      @unique
-  order      Order       @relation(fields: [orderId], references: [id])
   orderItems OrderItem[]
+
+  cartItems CartItem[] 
+
+  createdAt DateTime @default(now())
+
+  orders Order[]
 }
 
 model Category {
@@ -94,7 +96,8 @@ model Order {
   payment     Payment?
 
   createdAt DateTime @default(now())
-  product   Product?
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
 }
 
 model OrderItem {
