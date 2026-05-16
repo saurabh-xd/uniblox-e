@@ -9,9 +9,11 @@ import productRoutes from "./routes/product.routes.js"
 
 const app = express();
 
-app.use(cors());
-app.use(cookieParser())
-app.use(express.json());
+//express middleware fun, runs on evry incoming req
+
+app.use(cors());    //Used to enable Cross-Origin Resource Sharing (CORS) --> in this default allows from any origin
+app.use(cookieParser())   //Parses cookies from incoming requests.,,  adds req.cookies
+app.use(express.json());    //Parses JSON body ,, adds req.body
 
 app.use("/api/auth", authRoutes)
 app.use("/api/cart", cartRoutes);
