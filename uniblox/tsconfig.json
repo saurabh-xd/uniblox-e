@@ -46,6 +46,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/tests/**/*", "src/prisma/**/*", "src/generated/**/*"]
+  "include": ["src/**/*", "prisma"],
+  "exclude": ["src/tests/**/*", "prisma/**/*", "src/generated/**/*"]
 }

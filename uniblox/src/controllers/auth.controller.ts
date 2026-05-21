@@ -93,6 +93,9 @@ export async function signin(req: Request, res: Response) {
       expiresIn: "7d",
     });
 
+
+
+
     res.cookie("token", generateToken, {                                //sends token in cookie to browser
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -105,4 +108,26 @@ export async function signin(req: Request, res: Response) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
+}
+
+export async function logout(req: Request, res: Response){
+try {
+    res.clearCookie("token",{
+      httpOnly: true,
+       secure: process.env.NODE_ENV === "production",
+        sameSite:
+          process.env.NODE_ENV === "production" ? "none" : "strict",
+      });
+  
+      return res.status(200).json({
+        success: true,
+        message: "logged out successfully"
+      })
+} catch (error) {
+     return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+}
+
 }

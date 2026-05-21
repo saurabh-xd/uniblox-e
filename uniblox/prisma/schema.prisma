@@ -39,8 +39,8 @@ enum Status {
 
 model Cart {
   id        String     @id @default(uuid())
-  userid    String     @unique
-  user      User       @relation(fields: [userid], references: [id])
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
   cartItem  CartItem[]
   createdAt DateTime   @default(now())
 }
@@ -71,7 +71,6 @@ model Product {
 
   createdAt DateTime @default(now())
 
-  orders Order[]
 }
 
 model Category {
@@ -96,8 +95,7 @@ model Order {
   payment     Payment?
 
   createdAt DateTime @default(now())
-  product   Product? @relation(fields: [productId], references: [id])
-  productId String?
+  
 }
 
 model OrderItem {
@@ -106,7 +104,7 @@ model OrderItem {
   order   Order  @relation(fields: [orderId], references: [id])
 
   productId String
-  product   Product? @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
 
   quantity Int
   price    Float
